@@ -22,7 +22,7 @@ export default defineManifest({
     type: 'module',
   },
   content_scripts: [{
-    js: ['src/content/main.tsx'],
+    js: ['src/content/main.ts'],
     matches: ['http://*/*', 'https://*/*'],
     run_at: 'document_idle',
   }],
