@@ -2,7 +2,9 @@ import type { SaveHighlightMessage } from '../shared/types'
 
 const MIN_SELECTION_CHARS = 3
 const BUBBLE_WIDTH_PX = 140
-const BUBBLE_OFFSET_PX = 40
+const BUBBLE_BELOW_OFFSET_PX = 8
+const BUBBLE_HEIGHT_PX = 36
+const BUBBLE_ABOVE_OFFSET_PX = 40
 
 const SELECTION_KEYUP_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown']
 
@@ -62,10 +64,45 @@ function showBubble(rect: DOMRect, text: string) {
   shadow.append(style, button)
   document.body.appendChild(host)
 
-  const maxX = window.scrollX + document.documentElement.clientWidth - BUBBLE_WIDTH_PX
-  const x = Math.min(Math.max(rect.left + window.scrollX, 8), maxX)
-  const y = Math.max(rect.top + window.scrollY - BUBBLE_OFFSET_PX, window.scrollY + 8)
+  const minX = window.scrollX + 8
+  const maxX = window.scrollX + document.documentElement.clientWidth - BUBBLE_WIDTH_PX - 8
+  const x = Math.min(Math.max(rect.right + window.scrollX, minX), maxX)
+
+  const viewportBottom = window.scrollY + document.documentElement.clientHeight
+  let y = rect.bottom + window.scrollY + BUBBLE_BELOW_OFFSET_PX
+  if (y + BUBBLE_HEIGHT_PX > viewportBottom)
+    y = rect.top + window.scrollY - BUBBLE_ABOVE_OFFSET_PX
+  y = Math.max(y, window.scrollY + 8)
+
   host.style.transform = `translate(${x}px, ${y}px)`
+}
+
+function isEmptyRect(rect: DOMRect): boolean {
+  return rect.top === 0 && rect.left === 0 && rect.bottom === 0 && rect.right === 0
+}
+
+function focusPointRect(selection: Selection, fallback: DOMRect): DOMRect {
+  const { focusNode, focusOffset } = selection
+  if (focusNode) {
+    try {
+      const focusRange = document.createRange()
+      focusRange.setStart(focusNode, focusOffset)
+      focusRange.collapse(true)
+      const rect = focusRange.getBoundingClientRect()
+      if (!isEmptyRect(rect))
+        return rect
+    }
+    catch {
+      // fall through to fallback below
+    }
+  }
+
+  const rects = selection.getRangeAt(0).getClientRects()
+  const lastRect = rects[rects.length - 1]
+  if (lastRect && !isEmptyRect(lastRect))
+    return lastRect
+
+  return fallback
 }
 
 function maybeShowBubble() {
@@ -78,7 +115,8 @@ function maybeShowBubble() {
   }
   if (host && shownText === text)
     return
-  showBubble(selection.getRangeAt(0).getBoundingClientRect(), text)
+  const fallback = selection.getRangeAt(0).getBoundingClientRect()
+  showBubble(focusPointRect(selection, fallback), text)
 }
 
 document.addEventListener('mouseup', (event) => {
