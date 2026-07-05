@@ -1,5 +1,12 @@
 {
   "buildCommand": "cd web && bun run build",
   "installCommand": "cd web && bun install",
-  "outputDirectory": "web/dist"
+  "outputDirectory": "web/dist",
+  "redirects": [
+    {
+      "source": "/demo",
+      "destination": "https://www.loom.com/share/REPLACE_WITH_LOOM_ID",
+      "permanent": false
+    }
+  ]
 }
