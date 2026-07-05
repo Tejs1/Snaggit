@@ -130,3 +130,37 @@
   font-size: 11px;
   color: #6b6b80;
 }
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+}
+
+.settings label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #3a3a50;
+}
+
+.settings input,
+.settings select {
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid #d5d5e5;
+  border-radius: 5px;
+}
+
+.settings .save {
+  align-self: flex-start;
+  font-size: 13px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 5px;
+  background: #1a1a2e;
+  color: #fff;
+  cursor: pointer;
+}
