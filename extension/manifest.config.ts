@@ -15,7 +15,7 @@ export default defineManifest({
     },
     default_popup: 'src/popup/index.html',
   },
-  permissions: ['storage'],
+  permissions: ['storage', 'contextMenus'],
   host_permissions: ['https://api.openai.com/*'],
   background: {
     service_worker: 'src/background/index.ts',

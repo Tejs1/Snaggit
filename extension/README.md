@@ -15,7 +15,7 @@ Load in Chrome: `chrome://extensions` → enable Developer mode → **Load unpac
 
 ## Use
 
-1. Select text on any page → click the **Save Highlight?** bubble.
+1. Select text on any page → click the **Save Highlight?** bubble. You can also right-click a selection → **Save highlight to Snaggit**. Keyboard selections (Cmd/Ctrl+A, Shift+arrows) trigger the bubble too.
 2. Click the Snaggit toolbar icon to see saved highlights (newest first), delete them, or summarize one.
 3. For summaries: open Settings (⚙️), paste your OpenAI API key, pick a model.
 
@@ -26,5 +26,5 @@ Load in Chrome: `chrome://extensions` → enable Developer mode → **Load unpac
 - The bubble cannot appear on `chrome://` pages or the Chrome Web Store (Chrome blocks content scripts there).
 - Your API key lives in local extension storage; anyone with access to this browser profile could read it.
 - Summaries: snippets under 100 characters can't be summarized; snippets over 12,000 characters are truncated.
-- Selections shorter than 3 characters don't trigger the save bubble.
+- Selections shorter than 3 characters don't trigger the save bubble (the right-click "Save highlight to Snaggit" path has no minimum length, only non-empty).
 - The bubble only works in the page's top frame, not inside iframes.

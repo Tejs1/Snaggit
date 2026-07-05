@@ -7,7 +7,7 @@ const mock = installChromeMock()
 beforeEach(() => mock.reset())
 
 // Import for side effects (registers the onMessage listener) after the mock is installed.
-await import('./index')
+const { handleContextMenuClick } = await import('./index')
 
 function sendMessage(message: unknown): Promise<{ ok: boolean } | undefined> {
   return new Promise((resolve) => {
@@ -54,5 +54,46 @@ describe('background message handling', () => {
   it('unknown message types get no response', async () => {
     const response = await sendMessage({ type: 'UNKNOWN', payload: {} })
     expect(response).toBeUndefined()
+  })
+})
+
+describe('context menu save', () => {
+  const tab = { url: 'https://example.com/article', title: 'Article' } as chrome.tabs.Tab
+
+  it('persists a highlight when selection text is present', async () => {
+    handleContextMenuClick(
+      { menuItemId: 'snaggit-save-highlight', selectionText: '  some selected text  ' } as chrome.contextMenus.OnClickData,
+      tab,
+    )
+    await new Promise(resolve => setTimeout(resolve, 0))
+    const highlights = await getHighlights()
+    expect(highlights).toHaveLength(1)
+    expect(highlights[0]).toMatchObject({
+      text: 'some selected text',
+      pageUrl: 'https://example.com/article',
+      pageTitle: 'Article',
+    })
+  })
+
+  it('saves nothing when selectionText is empty or whitespace', async () => {
+    handleContextMenuClick(
+      { menuItemId: 'snaggit-save-highlight', selectionText: '   ' } as chrome.contextMenus.OnClickData,
+      tab,
+    )
+    handleContextMenuClick(
+      { menuItemId: 'snaggit-save-highlight', selectionText: undefined } as unknown as chrome.contextMenus.OnClickData,
+      tab,
+    )
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(await getHighlights()).toHaveLength(0)
+  })
+
+  it('saves nothing for a different menu item id', async () => {
+    handleContextMenuClick(
+      { menuItemId: 'some-other-item', selectionText: 'some selected text' } as chrome.contextMenus.OnClickData,
+      tab,
+    )
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(await getHighlights()).toHaveLength(0)
   })
 })

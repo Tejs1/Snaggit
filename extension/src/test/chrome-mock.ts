@@ -4,10 +4,15 @@ type Listener = (changes: StorageChanges, area: string) => void
 type RuntimeSendResponse = (response?: unknown) => void
 type RuntimeListener = (message: unknown, sender: unknown, sendResponse: RuntimeSendResponse) => boolean | void
 
+type OnInstalledListener = () => void
+type ContextMenuClickListener = (info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab) => void
+
 export function installChromeMock() {
   let store: Record<string, unknown> = {}
   const listeners = new Set<Listener>()
   const runtimeListeners = new Set<RuntimeListener>()
+  const onInstalledListeners = new Set<OnInstalledListener>()
+  const contextMenuClickListeners = new Set<ContextMenuClickListener>()
 
   const chromeMock = {
     storage: {
@@ -27,8 +32,19 @@ export function installChromeMock() {
         removeListener: (listener: Listener) => listeners.delete(listener),
       },
     },
+    contextMenus: {
+      create: (_props: unknown) => {},
+      onClicked: {
+        addListener: (listener: ContextMenuClickListener) => contextMenuClickListeners.add(listener),
+        removeListener: (listener: ContextMenuClickListener) => contextMenuClickListeners.delete(listener),
+      },
+    },
     runtime: {
       lastError: undefined as { message: string } | undefined,
+      onInstalled: {
+        addListener: (listener: OnInstalledListener) => onInstalledListeners.add(listener),
+        removeListener: (listener: OnInstalledListener) => onInstalledListeners.delete(listener),
+      },
       onMessage: {
         addListener: (listener: RuntimeListener) => runtimeListeners.add(listener),
         removeListener: (listener: RuntimeListener) => runtimeListeners.delete(listener),
