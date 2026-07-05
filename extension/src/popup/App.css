@@ -1,45 +1,132 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.app {
+  width: 380px;
+  max-height: 560px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e5e5ef;
+}
+
+.header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.icon {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.empty {
+  padding: 32px 20px;
   text-align: center;
+  color: #6b6b80;
+  font-size: 13px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-.logo.crx:hover {
-  filter: drop-shadow(0 0 2em #f2bae4aa);
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.list li {
+  border-bottom: 1px solid #f0f0f6;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.row {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.card {
-  padding: 2em;
+.text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  cursor: pointer;
 }
 
-.read-the-docs {
-  color: #888;
+.text.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.source {
+  font-size: 11px;
+  color: #4a4ae0;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary {
+  margin: 0;
+  padding: 8px 10px;
+  background: #f5f5fb;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #3a3a50;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actions button {
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid #d5d5e5;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.actions button:hover:not(:disabled) {
+  background: #f5f5fb;
+}
+
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  font-size: 12px;
+  color: #c0392b;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.error button,
+.error .link {
+  font-size: 12px;
+  background: none;
+  border: none;
+  color: #4a4ae0;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.note {
+  font-size: 11px;
+  color: #6b6b80;
 }
