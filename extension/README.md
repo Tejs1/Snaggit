@@ -26,3 +26,5 @@ Load in Chrome: `chrome://extensions` → enable Developer mode → **Load unpac
 - The bubble cannot appear on `chrome://` pages or the Chrome Web Store (Chrome blocks content scripts there).
 - Your API key lives in local extension storage; anyone with access to this browser profile could read it.
 - Summaries: snippets under 100 characters can't be summarized; snippets over 12,000 characters are truncated.
+- Selections shorter than 3 characters don't trigger the save bubble.
+- The bubble only works in the page's top frame, not inside iframes.

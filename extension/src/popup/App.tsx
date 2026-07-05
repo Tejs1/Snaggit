@@ -40,7 +40,7 @@ export default function App() {
       {highlights.length === 0
         ? (
             <div className="empty">
-              Select text on any page and click "Save Highlight?" to get started.
+              Select text on any page and click “Save Highlight?” to get started.
             </div>
           )
         : (
