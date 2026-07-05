@@ -31,3 +31,15 @@ export interface SaveHighlightMessage {
   type: 'SAVE_HIGHLIGHT'
   payload: NewHighlight
 }
+
+export interface DeleteHighlightMessage {
+  type: 'DELETE_HIGHLIGHT'
+  payload: { id: string }
+}
+
+export interface SetSummaryMessage {
+  type: 'SET_SUMMARY'
+  payload: { id: string, summary: HighlightSummary }
+}
+
+export type HighlightMutationMessage = SaveHighlightMessage | DeleteHighlightMessage | SetSummaryMessage

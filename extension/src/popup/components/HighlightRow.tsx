@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Highlight, Settings } from '../../shared/types'
-import { deleteHighlight, setSummary } from '../../shared/storage'
+import { requestDeleteHighlight, requestSetSummary } from '../../shared/messages'
 import {
   DirectOpenAIProvider,
   MIN_SNIPPET_CHARS,
@@ -33,7 +33,7 @@ export function HighlightRow({ highlight, settings, onOpenSettings }: Props) {
     try {
       const text = await provider.summarize(snippet.text, settings)
       const suffix = snippet.truncated ? TRUNCATION_NOTE : ''
-      await setSummary(highlight.id, {
+      await requestSetSummary(highlight.id, {
         text: text + suffix,
         model: settings.model,
         createdAt: Date.now(),
@@ -72,7 +72,7 @@ export function HighlightRow({ highlight, settings, onOpenSettings }: Props) {
         >
           {pending ? 'Summarizing…' : highlight.summary ? 'Re-summarize' : 'Summarize'}
         </button>
-        <button onClick={() => void deleteHighlight(highlight.id)}>Delete</button>
+        <button onClick={() => void requestDeleteHighlight(highlight.id).catch(console.error)}>Delete</button>
       </div>
       {error && (
         <div className="error">
