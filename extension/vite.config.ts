@@ -17,6 +17,13 @@ export default defineConfig({
     crx({ manifest }),
     zip({ outDir: 'release', outFileName: `crx-${name}-${version}.zip` }),
   ],
+  build: {
+    rollupOptions: {
+      input: {
+        library: path.resolve(__dirname, 'src/library/index.html'),
+      },
+    },
+  },
   server: {
     cors: {
       origin: [

@@ -5,6 +5,19 @@
   flex-direction: column;
 }
 
+.app--full {
+  width: min(760px, 100vw - 32px);
+  max-height: none;
+  margin: 24px auto;
+  border: 1px solid #e5e5ef;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.app--full .list {
+  overflow-y: visible;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -16,6 +29,12 @@
 .header h1 {
   font-size: 16px;
   margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .icon {

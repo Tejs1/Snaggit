@@ -4,3 +4,7 @@ body {
   color: #1a1a2e;
   background: #fff;
 }
+
+body.library {
+  background: #f5f5f8;
+}

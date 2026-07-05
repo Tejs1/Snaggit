@@ -18,6 +18,7 @@ Load in Chrome: `chrome://extensions` → enable Developer mode → **Load unpac
 1. Select text on any page → click the **Save Highlight?** bubble. You can also right-click a selection → **Save highlight to Snaggit**. Keyboard selections (Cmd/Ctrl+A, Shift+arrows) trigger the bubble too.
 2. Click the Snaggit toolbar icon to see saved highlights (newest first), delete them, or summarize one.
 3. For summaries: open Settings (⚙️), paste your OpenAI API key, pick a model.
+4. Click the ⛶ button in the popup to open the full-page highlights view for more room.
 
 ## Limitations
 
