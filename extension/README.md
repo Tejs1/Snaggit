@@ -1,52 +1,28 @@
-# React + Vite + CRXJS
+# Snaggit
 
-This template helps you quickly start developing Chrome extensions with React, TypeScript and Vite. It includes the CRXJS Vite plugin for seamless Chrome extension development.
+Chrome extension: save text highlights from any page and summarize them with OpenAI.
 
-## Features
-
-- React with TypeScript
-- TypeScript support
-- Vite build tool
-- CRXJS Vite plugin integration
-- Chrome extension manifest configuration
-
-## Quick Start
-
-1. Install dependencies:
+## Develop
 
 ```bash
-npm install
+bun install
+bun run dev     # dev build with HMR
+bun run build   # production build → dist/
+bun run test    # unit tests (Vitest)
 ```
 
-2. Start development server:
+Load in Chrome: `chrome://extensions` → enable Developer mode → **Load unpacked** → select `extension/dist`.
 
-```bash
-npm run dev
-```
+## Use
 
-3. Open Chrome and navigate to `chrome://extensions/`, enable "Developer mode", and load the unpacked extension from the `dist` directory.
+1. Select text on any page → click the **Save Highlight?** bubble.
+2. Click the Snaggit toolbar icon to see saved highlights (newest first), delete them, or summarize one.
+3. For summaries: open Settings (⚙️), paste your OpenAI API key, pick a model.
 
-4. Build for production:
+## Limitations
 
-```bash
-npm run build
-```
-
-## Project Structure
-
-- `src/popup/` - Extension popup UI
-- `src/content/` - Content scripts
-- `manifest.config.ts` - Chrome extension manifest configuration
-
-## Documentation
-
-- [React Documentation](https://reactjs.org/)
-- [Vite Documentation](https://vitejs.dev/)
-- [CRXJS Documentation](https://crxjs.dev/vite-plugin)
-
-## Chrome Extension Development Notes
-
-- Use `manifest.config.ts` to configure your extension
-- The CRXJS plugin automatically handles manifest generation
-- Content scripts should be placed in `src/content/`
-- Popup UI should be placed in `src/popup/`
+- Highlights are stored locally (`chrome.storage.local`) — no sync, no server.
+- Saved highlights are not re-marked on the page when you revisit it.
+- The bubble cannot appear on `chrome://` pages or the Chrome Web Store (Chrome blocks content scripts there).
+- Your API key lives in local extension storage; anyone with access to this browser profile could read it.
+- Summaries: snippets under 100 characters can't be summarized; snippets over 12,000 characters are truncated.
