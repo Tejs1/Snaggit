@@ -56,7 +56,7 @@ describe('DirectOpenAIProvider', () => {
     const fetchSpy = vi.fn(async () => openAIResponse(200, 'ok'))
     vi.stubGlobal('fetch', fetchSpy)
     await provider.summarize('the passage', settings)
-    const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit]
+    const [url, init] = fetchSpy.mock.calls[0] as unknown as [string, RequestInit]
     expect(url).toBe('https://api.openai.com/v1/chat/completions')
     expect((init.headers as Record<string, string>).Authorization).toBe('Bearer sk-test')
     const body = JSON.parse(init.body as string)
