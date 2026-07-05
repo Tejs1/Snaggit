@@ -4,11 +4,15 @@ const MIN_SELECTION_CHARS = 3
 const BUBBLE_WIDTH_PX = 140
 const BUBBLE_OFFSET_PX = 40
 
+const SELECTION_KEYUP_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown']
+
 let host: HTMLDivElement | null = null
+let shownText: string | null = null
 
 function removeBubble() {
   host?.remove()
   host = null
+  shownText = null
 }
 
 function isEditable(node: Node | null): boolean {
@@ -20,6 +24,7 @@ function isEditable(node: Node | null): boolean {
 
 function showBubble(rect: DOMRect, text: string) {
   removeBubble()
+  shownText = text
   host = document.createElement('div')
   host.style.cssText = 'position:absolute;top:0;left:0;z-index:2147483647;'
   const shadow = host.attachShadow({ mode: 'closed' })
@@ -63,20 +68,32 @@ function showBubble(rect: DOMRect, text: string) {
   host.style.transform = `translate(${x}px, ${y}px)`
 }
 
+function maybeShowBubble() {
+  const selection = window.getSelection()
+  const text = selection?.toString().trim() ?? ''
+  if (!selection || selection.isCollapsed || text.length < MIN_SELECTION_CHARS
+    || isEditable(selection.anchorNode)) {
+    removeBubble()
+    return
+  }
+  if (host && shownText === text)
+    return
+  showBubble(selection.getRangeAt(0).getBoundingClientRect(), text)
+}
+
 document.addEventListener('mouseup', (event) => {
   if (host && event.composedPath().includes(host))
     return
   // Defer so a click that collapses the selection is processed first
-  setTimeout(() => {
-    const selection = window.getSelection()
-    const text = selection?.toString().trim() ?? ''
-    if (!selection || selection.isCollapsed || text.length < MIN_SELECTION_CHARS
-      || isEditable(selection.anchorNode)) {
-      removeBubble()
-      return
-    }
-    showBubble(selection.getRangeAt(0).getBoundingClientRect(), text)
-  }, 0)
+  setTimeout(maybeShowBubble, 0)
+})
+
+document.addEventListener('keyup', (event) => {
+  const isSelectAll = event.key === 'a' && (event.metaKey || event.ctrlKey)
+  const isShiftNav = event.shiftKey && SELECTION_KEYUP_KEYS.includes(event.key)
+  if (!isSelectAll && !isShiftNav)
+    return
+  setTimeout(maybeShowBubble, 0)
 })
 
 document.addEventListener('mousedown', (event) => {
