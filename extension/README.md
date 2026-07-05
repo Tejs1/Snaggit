@@ -24,7 +24,7 @@ Load in Chrome: `chrome://extensions` → enable Developer mode → **Load unpac
 - Highlights are stored locally (`chrome.storage.local`) — no sync, no server.
 - Saved highlights are not re-marked on the page when you revisit it.
 - The bubble cannot appear on `chrome://` pages or the Chrome Web Store (Chrome blocks content scripts there).
-- Your API key lives in local extension storage; anyone with access to this browser profile could read it.
+- Your API key lives in local extension storage; anyone with access to this browser profile could read it. The Settings UI never re-displays the saved key — it only shows a masked preview (e.g. `sk-••••wxyz`).
 - Summaries: snippets under 100 characters can't be summarized; snippets over 12,000 characters are truncated.
 - Selections shorter than 3 characters don't trigger the save bubble (the right-click "Save highlight to Snaggit" path has no minimum length, only non-empty).
 - The bubble only works in the page's top frame, not inside iframes.

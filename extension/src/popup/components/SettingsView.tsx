@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Settings } from '../../shared/types'
 import { MODEL_OPTIONS } from '../../shared/types'
 import { saveSettings } from '../../shared/storage'
+import { maskKey } from '../../shared/mask'
 
 interface Props {
   settings: Settings
@@ -10,11 +11,13 @@ interface Props {
 }
 
 export function SettingsView({ settings, onSave, onBack }: Props) {
-  const [apiKey, setApiKey] = useState(settings.openaiApiKey)
+  const [apiKey, setApiKey] = useState('')
   const [model, setModel] = useState(settings.model)
+  const hasSavedKey = settings.openaiApiKey.length > 0
 
   async function handleSave() {
-    const next: Settings = { openaiApiKey: apiKey.trim(), model }
+    const trimmed = apiKey.trim()
+    const next: Settings = { openaiApiKey: trimmed.length > 0 ? trimmed : settings.openaiApiKey, model }
     await saveSettings(next)
     onSave(next)
   }
@@ -28,11 +31,18 @@ export function SettingsView({ settings, onSave, onBack }: Props) {
       <div className="settings">
         <label>
           OpenAI API key
+          {hasSavedKey && (
+            <p className="hint">
+              Current key:
+              {' '}
+              {maskKey(settings.openaiApiKey)}
+            </p>
+          )}
           <input
             type="password"
             value={apiKey}
             onChange={event => setApiKey(event.target.value)}
-            placeholder="sk-…"
+            placeholder={hasSavedKey ? 'Leave blank to keep current key' : 'sk-…'}
           />
         </label>
         <label>
@@ -45,8 +55,9 @@ export function SettingsView({ settings, onSave, onBack }: Props) {
         </label>
         <button className="save" onClick={() => void handleSave()}>Save</button>
         <p className="note">
-          Your key is stored only on this device, in extension storage. Anyone with
-          access to this browser profile could read it.
+          Your key is stored only on this device, in extension storage. The settings
+          UI only ever shows a masked preview of a saved key, but anyone with access
+          to this browser profile could still read the stored value.
         </p>
       </div>
     </div>
