@@ -8,9 +8,10 @@ interface Props {
   settings: Settings
   onSave: (settings: Settings) => void
   onBack: () => void
+  variant?: 'popup' | 'full'
 }
 
-export function SettingsView({ settings, onSave, onBack }: Props) {
+export function SettingsView({ settings, onSave, onBack, variant = 'popup' }: Props) {
   const [apiKey, setApiKey] = useState('')
   const [model, setModel] = useState(settings.model)
   const hasSavedKey = settings.openaiApiKey.length > 0
@@ -23,7 +24,7 @@ export function SettingsView({ settings, onSave, onBack }: Props) {
   }
 
   return (
-    <div className="app">
+    <div className={variant === 'full' ? 'app app--full' : 'app'}>
       <header className="header">
         <h1>Settings</h1>
         <button className="icon" onClick={onBack} title="Back">←</button>

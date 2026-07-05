@@ -31,6 +31,7 @@ export default function App({ variant = 'popup' }: AppProps) {
           setView('list')
         }}
         onBack={() => setView('list')}
+        variant={variant}
       />
     )
   }
